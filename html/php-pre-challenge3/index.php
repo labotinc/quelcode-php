@@ -23,11 +23,24 @@ class PhpPreChallenge3
 
     echo $limit;
   }
+
+  /**
+   * 入力文字列が1以上の整数でなければ例外を投げる。
+   * 1以上の整数なら整数型にして返却する。
+   */
   public static function getLimitInt(string $limitStr): int
   {
-    if (true) {
-      throw new Exception('invalid limit : ' . $limitStr);
+    $errMsg = 'invalid limit : ' . $limitStr;
+    if (false === ctype_digit($limitStr)) {
+      // 整数ではない、または負の値である
+      throw new Exception($errMsg);
     }
-    return 0;
+    $limit = intval($limitStr);
+    if ($limit < 1) {
+      // 1未満である
+      throw new Exception($errMsg);
+    }
+    // ガード突破
+    return $limit;
   }
 }
