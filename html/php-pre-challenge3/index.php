@@ -21,6 +21,7 @@ class PhpPreChallenge3
     try {
       $limit = self::getLimitInt($limitStr);
     } catch (Exception $e) {
+      http_response_code(400);
       echo json_encode($e->getMessage());
       exit();
     }
