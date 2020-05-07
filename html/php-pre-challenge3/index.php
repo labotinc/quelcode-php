@@ -8,20 +8,26 @@ $dsn = 'mysql:dbname=test;host=mysql';
 $dbuser = 'test';
 $dbpassword = 'test';
 
-PhpPreChallenge3::run($limit);
+PhpPreChallenge3::run($limit, $dsn, $dbuser, $dbpassword);
 
 class PhpPreChallenge3
 {
-  public static function run(string $limitStr)
-  {
+  public static function run(
+    string $limitStr,
+    string $dsn,
+    string $dbuser,
+    string $dbpassword
+  ) {
     try {
       $limit = self::getLimitInt($limitStr);
     } catch (Exception $e) {
       echo json_encode($e->getMessage());
       exit();
     }
+    $nums = self::getNumsFromDb($limit, $dsn, $dbuser, $dbpassword);
 
-    echo $limit;
+    echo '<pre>';
+    print_r($nums);
   }
 
   /**
@@ -42,5 +48,35 @@ class PhpPreChallenge3
     }
     // ガード突破
     return $limit;
+  }
+
+  /**
+   * dbから値を整数型の昇順で取得する。
+   * limitが4なら5以上の値は除外する
+   */
+  public static function getNumsFromDb(
+    int $limit,
+    string $dsn,
+    string $dbuser,
+    string $dbpassword
+  ): array {
+    $nums = [];
+    try {
+      $pdo = new Pdo($dsn, $dbuser, $dbpassword);
+      $sql = 'select value from prechallenge3 ';
+      $sql .= 'where value <= :value ';
+      $sql .= 'order by value asc';
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindValue(':value', $limit);
+      $stmt->execute();
+      $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      foreach ($records as $record) {
+        // 整数型にする
+        $nums[] = intval($record['value']);
+      }
+    } catch (PDOException $e) {
+      throw $e;
+    }
+    return $nums;
   }
 }
