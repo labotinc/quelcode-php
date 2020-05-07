@@ -19,14 +19,25 @@ class PhpPreChallenge3
     string $dbpassword
   ) {
     try {
-      $limit = self::getLimitInt($limitStr);
+      self::runCore($limitStr, $dsn, $dbuser, $dbpassword);
     } catch (Exception $e) {
       http_response_code(400);
       echo json_encode($e->getMessage());
-      exit();
     }
-    $nums = self::getNumsFromDb($limit, $dsn, $dbuser, $dbpassword);
+    exit();
+  }
 
+  /**
+   * 例外投げます
+   */
+  private static function runCore(
+    string $limitStr,
+    string $dsn,
+    string $dbuser,
+    string $dbpassword
+  ) {
+    $limit = self::getLimitInt($limitStr);
+    $nums = self::getNumsFromDb($limit, $dsn, $dbuser, $dbpassword);
     echo '<pre>';
     print_r($nums);
   }
@@ -35,7 +46,7 @@ class PhpPreChallenge3
    * 入力文字列が1以上の整数でなければ例外を投げる。
    * 1以上の整数なら整数型にして返却する。
    */
-  public static function getLimitInt(string $limitStr): int
+  private static function getLimitInt(string $limitStr): int
   {
     $errMsg = 'invalid limit : ' . $limitStr;
     if (false === ctype_digit($limitStr)) {
@@ -55,7 +66,7 @@ class PhpPreChallenge3
    * dbから値を整数型の昇順で取得する。
    * limitが4なら5以上の値は除外する
    */
-  public static function getNumsFromDb(
+  private static function getNumsFromDb(
     int $limit,
     string $dsn,
     string $dbuser,
