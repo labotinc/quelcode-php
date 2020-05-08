@@ -63,8 +63,8 @@ class PhpPreChallenge3
   }
 
   /**
-   * 入力文字列が1以上の整数でなければ例外を投げる。
-   * 1以上の整数なら整数型にして返却する。
+   * 入力文字列が1以上の整数でなければ例外を投げる
+   * 1以上の整数なら整数型にして返却する
    */
   private static function getLimitInt(string $limitStr): int
   {
@@ -83,7 +83,7 @@ class PhpPreChallenge3
   }
 
   /**
-   * dbから値を整数型の昇順で取得する。
+   * dbから値を整数型の昇順で取得する
    * limitが4なら5以上の値は除外する
    */
   private static function getNumsFromDb(
@@ -126,14 +126,14 @@ class PhpPreChallenge3
     $binStr = decbin($num);
     $binLen = strlen($binStr);
     if ($binLen < $length) {
-      // lengthに足りない
+      /* lengthに足りない */
       $cnt = $length - $binLen;
       // パディング
       for ($i = 0; $i < $cnt; $i++) {
         $binStr = '0' . $binStr;
       }
     } else if ($length < $binLen) {
-      // lengthをはみ出す
+      /* lengthをはみ出す */
       $pos = $binLen - $length;
       // スライス
       $binStr = substr($binStr, $pos);
