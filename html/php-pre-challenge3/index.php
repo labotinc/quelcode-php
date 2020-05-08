@@ -63,22 +63,6 @@ class PhpPreChallenge3
   }
 
   /**
-   * [1,2,3,4], 1111 => 10
-   * [1,2,3,4], 1101 => 7
-   */
-  private static function arraySumAtBinStr(array $a, string $binStr): int
-  {
-    $binArray = str_split($binStr);
-    $sum = 0;
-    foreach ($binArray as $idx => $bit) {
-      if ($bit) {
-        $sum += $a[$idx];
-      }
-    }
-    return $sum;
-  }
-
-  /**
    * 入力文字列が1以上の整数でなければ例外を投げる。
    * 1以上の整数なら整数型にして返却する。
    */
@@ -156,5 +140,21 @@ class PhpPreChallenge3
       /* DO NOTHING */
     }
     return $binStr;
+  }
+
+  /**
+   * [1,2,3,4], 1111 => 10
+   * [1,2,3,4], 1101 => 7
+   */
+  private static function arraySumAtBinStr(array $a, string $binStr): int
+  {
+    $binArray = str_split($binStr);
+    $sum = 0;
+    foreach ($binArray as $idx => $bit) {
+      if ($bit) {
+        $sum += $a[$idx];
+      }
+    }
+    return $sum;
   }
 }
