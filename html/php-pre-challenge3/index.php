@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$limit = $_GET['target'];
+$limit = $_GET['target'] ?? '';
 
 $dsn = 'mysql:dbname=test;host=mysql';
 $dbuser = 'test';
@@ -40,6 +40,7 @@ class PhpPreChallenge3
     $nums = self::getNumsFromDb($limit, $dsn, $dbuser, $dbpassword);
     echo '<pre>';
     print_r($nums);
+    var_dump(self::lengthToBitPattern2DArray(2));
   }
 
   /**
@@ -117,7 +118,11 @@ class PhpPreChallenge3
       $currentLen = strlen($bitmap);
       $pad = self::get0Pad($currentLen, $length);
       $bitmap = $pad . $bitmap;
-      $_2DArray[] = str_split($bitmap);
+      $bitPattern = str_split($bitmap);
+      array_walk($bitPattern, function (&$value) {
+        $value = intval($value);
+      });
+      $_2DArray[] = $bitPattern;
     }
     return $_2DArray;
   }
