@@ -41,13 +41,14 @@ class PhpPreChallenge3
     $length = count($nums);
     $numOfFullBit = pow(2, $length) - 1;
 
-    $patterns = [[]];
+    $patterns = [];
     for ($i = 1; $i <= $numOfFullBit; $i++) {
-      $binStr = self::numUnsignedToBinStr($numOfFullBit, $length);
+      $binStr = self::numUnsignedToBinStr($i, $length);
       $sum = self::arraySumAtBinStr($nums, $binStr);
       if ($sum === $limit) {
         // パターン発見
         $binArray = str_split($binStr);
+        $pattern = [];
         foreach ($binArray as $idx => $bit) {
           if ($bit) {
             $pattern[] = $nums[$idx];
