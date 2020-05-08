@@ -41,15 +41,28 @@ class PhpPreChallenge3
     $length = count($nums);
     $numOfFullBit = pow(2, $length) - 1;
 
-    echo '<pre>';
-
-    $binStr = self::numUnsignedToBinStr($numOfFullBit, $length);
-    echo self::arraySumAtBinStr($nums, $binStr) . PHP_EOL;
-
-    $binStr = self::numUnsignedToBinStr(0, $length);
-    echo self::arraySumAtBinStr($nums, $binStr) . PHP_EOL;
+    $patterns = [[]];
+    for ($i = 1; $i <= $numOfFullBit; $i++) {
+      $binStr = self::numUnsignedToBinStr($numOfFullBit, $length);
+      $sum = self::arraySumAtBinStr($nums, $binStr);
+      if ($sum === $limit) {
+        // パターン発見
+        $binArray = str_split($binStr);
+        foreach ($binArray as $idx => $bit) {
+          if ($bit) {
+            $pattern[] = $nums[$idx];
+          }
+        }
+        $patterns[] = $pattern;
+      }
+    }
+    echo json_encode($patterns);
   }
 
+  /**
+   * [1,2,3,4], 1111 => 10
+   * [1,2,3,4], 1101 => 7
+   */
   private static function arraySumAtBinStr(array $a, string $binStr): int
   {
     $binArray = str_split($binStr);
