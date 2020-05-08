@@ -44,13 +44,6 @@ class PhpPreChallenge3
     print_r($nums);
 
     $num = 10;
-    echo self::numUnsignedToBittPatternStr($num, 1) . '<br>';
-    echo self::numUnsignedToBittPatternStr($num, 2) . '<br>';
-    echo self::numUnsignedToBittPatternStr($num, 3) . '<br>';
-    echo self::numUnsignedToBittPatternStr($num, 4) . '<br>';
-    echo self::numUnsignedToBittPatternStr($num, 5) . '<br>';
-    echo self::numUnsignedToBittPatternStr($num, 6) . '<br>';
-    echo self::numUnsignedToBittPatternStr($num, 7) . '<br>';
   }
 
   /**
@@ -117,10 +110,10 @@ class PhpPreChallenge3
   }
 
   // 0または正の整数を指定のbit長の2進数文字列にする
-  private static function numUnsignedToBittPatternStr(int $num, int $length): string
+  private static function numUnsignedToBinStr(int $num, int $length): string
   {
     if ($num < 0 || $length <= 0) {
-      throw new Exception('numToBittPatternStr() invalid num or length : ' . $num . ', ' . $length);
+      throw new Exception('numUnsignedToBinStr() invalid num or length : ' . $num . ', ' . $length);
     }
     $binStr = decbin($num);
     $binLen = strlen($binStr);
