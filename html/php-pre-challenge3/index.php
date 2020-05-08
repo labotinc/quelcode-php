@@ -38,9 +38,11 @@ class PhpPreChallenge3
   ) {
     $limit = self::getLimitInt($limitStr);
     $nums = self::getNumsFromDb($limit, $dsn, $dbuser, $dbpassword);
+    $length = count($nums);
+    $bitPatterns = self::lengthToBitPatterns($length);
     echo '<pre>';
     print_r($nums);
-    var_dump(self::lengthToBitPattern2DArray(2));
+    print_r($bitPatterns);
   }
 
   /**
@@ -109,21 +111,22 @@ class PhpPreChallenge3
   /*
    * 2 => [[1,1], [1,0], [0,1], [0,0]]
    */
-  private static function lengthToBitPattern2DArray(int $length): array
+  private static function lengthToBitPatterns(int $length): array
   {
     $numOfFullBit = pow(2, $length) - 1; // 11111
-    $_2DArray = [];
+    $bitPatterns = [];
     for ($i = 0; $i <= $numOfFullBit; $i++) {
       $bitmap = decbin($numOfFullBit - $i);
       $currentLen = strlen($bitmap);
       $pad = self::get0Pad($currentLen, $length);
       $bitmap = $pad . $bitmap;
       $bitPattern = str_split($bitmap);
+      // 要素を整数型にする
       array_walk($bitPattern, function (&$value) {
         $value = intval($value);
       });
-      $_2DArray[] = $bitPattern;
+      $bitPatterns[] = $bitPattern;
     }
-    return $_2DArray;
+    return $bitPatterns;
   }
 }
