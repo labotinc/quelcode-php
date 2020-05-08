@@ -91,4 +91,34 @@ class PhpPreChallenge3
     }
     return $nums;
   }
+
+  /**
+   * 上位bitの'0'pad取得
+   */
+  private static function get0Pad(int $currentLen, int $maxLen): string
+  {
+    $cnt = $maxLen - $currentLen;
+    $pad = '';
+    for ($i = 0; $i < $cnt; $i++) {
+      $pad .= '0';
+    }
+    return $pad;
+  }
+
+  /*
+   * 2 => [[1,1], [1,0], [0,1], [0,0]]
+   */
+  private static function lengthToBitPattern2DArray(int $length): array
+  {
+    $numOfFullBit = pow(2, $length) - 1; // 11111
+    $_2DArray = [];
+    for ($i = 0; $i <= $numOfFullBit; $i++) {
+      $bitmap = decbin($numOfFullBit - $i);
+      $currentLen = strlen($bitmap);
+      $pad = self::get0Pad($currentLen, $length);
+      $bitmap = $pad . $bitmap;
+      $_2DArray[] = str_split($bitmap);
+    }
+    return $_2DArray;
+  }
 }
