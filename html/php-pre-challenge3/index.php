@@ -128,12 +128,14 @@ class PhpPreChallenge3
     if ($binLen < $length) {
       // lengthに足りない
       $cnt = $length - $binLen;
+      // パディング
       for ($i = 0; $i < $cnt; $i++) {
         $binStr = '0' . $binStr;
       }
     } else if ($length < $binLen) {
       // lengthをはみ出す
       $pos = $binLen - $length;
+      // スライス
       $binStr = substr($binStr, $pos);
     } else {
       // lengthと同じ長さ
