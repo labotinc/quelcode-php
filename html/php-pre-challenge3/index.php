@@ -129,19 +129,11 @@ class PhpPreChallenge3
   }
 
   /**
-   * 上位bitの'0'pad取得
+   * 0または正の整数を指定のbit長の2進数文字列にする
+   * 9, 3 => 001 
+   * 9, 4 => 1001
+   * 9, 5 => 01001
    */
-  private static function get0Pad(int $currentLen, int $maxLen): string
-  {
-    $cnt = $maxLen - $currentLen;
-    $pad = '';
-    for ($i = 0; $i < $cnt; $i++) {
-      $pad .= '0';
-    }
-    return $pad;
-  }
-
-  // 0または正の整数を指定のbit長の2進数文字列にする
   private static function numUnsignedToBinStr(int $num, int $length): string
   {
     if ($num < 0 || $length <= 0) {
@@ -164,27 +156,5 @@ class PhpPreChallenge3
       /* DO NOTHING */
     }
     return $binStr;
-  }
-
-  /*
-   * 2 => [[1,1], [1,0], [0,1], [0,0]]
-   */
-  private static function lengthToBitPatterns(int $length): array
-  {
-    $numOfFullBit = pow(2, $length) - 1; // 11111
-    $bitPatterns = [];
-    for ($i = 0; $i <= $numOfFullBit; $i++) {
-      $bitmap = decbin($numOfFullBit - $i);
-      $currentLen = strlen($bitmap);
-      $pad = self::get0Pad($currentLen, $length);
-      $bitmap = $pad . $bitmap;
-      $bitPattern = str_split($bitmap);
-      // 要素を整数型にする
-      array_walk($bitPattern, function (&$value) {
-        $value = intval($value);
-      });
-      $bitPatterns[] = $bitPattern;
-    }
-    return $bitPatterns;
   }
 }
