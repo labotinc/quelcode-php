@@ -17,7 +17,7 @@ class PhpPreChallenge3
     string $dsn,
     string $dbuser,
     string $dbpassword
-  ) {
+  ): void {
     try {
       self::runCore($limitStr, $dsn, $dbuser, $dbpassword);
     } catch (Exception $e) {
@@ -35,7 +35,7 @@ class PhpPreChallenge3
     string $dsn,
     string $dbuser,
     string $dbpassword
-  ) {
+  ): void {
     $limit = self::getLimitInt($limitStr);
     $nums = self::getNumsFromDb($limit, $dsn, $dbuser, $dbpassword);
     $length = count($nums);
@@ -46,7 +46,7 @@ class PhpPreChallenge3
       $binStr = self::numUnsignedToBinStr($i, $length);
       $sum = self::arraySumAtBinStr($nums, $binStr);
       if ($sum === $limit) {
-        // パターン発見
+        /* パターン発見 */
         $binArray = str_split($binStr);
         $pattern = [];
         foreach ($binArray as $idx => $bit) {
