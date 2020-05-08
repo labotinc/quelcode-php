@@ -39,11 +39,27 @@ class PhpPreChallenge3
     $limit = self::getLimitInt($limitStr);
     $nums = self::getNumsFromDb($limit, $dsn, $dbuser, $dbpassword);
     $length = count($nums);
-    $bitPatterns = self::lengthToBitPatterns($length);
-    echo '<pre>';
-    print_r($nums);
+    $numOfFullBit = pow(2, $length) - 1;
 
-    $num = 10;
+    echo '<pre>';
+
+    $binStr = self::numUnsignedToBinStr($numOfFullBit, $length);
+    echo self::arraySumAtBinStr($nums, $binStr) . PHP_EOL;
+
+    $binStr = self::numUnsignedToBinStr(0, $length);
+    echo self::arraySumAtBinStr($nums, $binStr) . PHP_EOL;
+  }
+
+  private static function arraySumAtBinStr(array $a, string $binStr): int
+  {
+    $binArray = str_split($binStr);
+    $sum = 0;
+    foreach ($binArray as $idx => $bit) {
+      if ($bit) {
+        $sum += $a[$idx];
+      }
+    }
+    return $sum;
   }
 
   /**
