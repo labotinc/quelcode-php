@@ -57,6 +57,8 @@ class PhpPreChallenge3
         $patterns[] = $pattern;
       }
     }
+    // 見栄えをよくする
+    $patterns = array_reverse($patterns);
     echo json_encode($patterns);
   }
 
