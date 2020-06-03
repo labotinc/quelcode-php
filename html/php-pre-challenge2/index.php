@@ -6,11 +6,6 @@ $array = explode(',', $_GET['array']);
 $length = count($array);
 $比較 = 0;
 
-echo "<pre>";
-echo '<strong>並べ替え前 / Before sorting</strong><br>';
-print_r($array);
-echo "</pre>";
-
 echo "<h1>Bubble Sort Algorithm</h2>";
 
 for ( $i = 0; $i < $length; $i++ ) {
@@ -26,7 +21,6 @@ for ( $i = 0; $i < $length; $i++ ) {
 // 修正はここまで
 
 echo "<pre>";
-echo '<strong>並べ替え後 / After sorting</strong><br>';
 echo '<h4>' . $比較. ' 比較回数 / Comparisons </h4>';
 print_r($array);
 echo "</pre>";
