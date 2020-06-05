@@ -3,14 +3,12 @@
 $array = explode(',', $_GET['array']);
 
 // 修正はここから
-$length = count($array);
+$amount = count($array);
 $start = -1;
 
 // don't need to declare $amount as variable as this if statement sets it automatically
 // $amount= count($array); FOLLOWING IF STATEMENT IS AUTOMATIICALLY DECLARED WHEN USING IF STATEMENT
-if( !$amount = $length ){
-    return $array;
-}
+
 while( $start < $amount ){
     ++$start;
     --$amount;
