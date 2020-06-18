@@ -2,7 +2,7 @@
 session_start();
 require('dbconnect.php');
 
-if (isset($_SESSION['id'])){
+if (isset($_SESSION['id'])) {
 
     $like_increment = $db->prepare('INSERT INTO likes SET like_member_id=?, like_post_id=?');
     $like_increment->execute(array(
