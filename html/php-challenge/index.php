@@ -163,10 +163,26 @@ function makeLink($value)
 									}
 									$check_result = $retweet_check->fetch();
 									?>
-									<?php if ((int)$check_result['cnt'] === 0): ?>
-									<a style=color:#ccc; href="retweet.php?retweet_member_id=<?php echo $_SESSION['id']; ?>&retweet_post_id=<?php echo $post['id']; ?>"><i class="fas fa-retweet"></i></a>
-									<?php else: ?>
-									<a style=color:green; href="delete_retweet.php?retweet_member_id=<?php echo $_SESSION['id']; ?>&retweet_post_id=<?php echo $post['id']; ?>"><i class="fas fa-retweet"></i></a>
+
+									<!--投稿がリツイートされている場合渡す元の投稿のURLパラメーターを渡すようにする-->
+									<?php if ((int) $check_result['cnt'] === 0) : ?>
+										<a style=color:#ccc; href="retweet.php?retweet_member_id=<?php echo $_SESSION['id']; ?>&retweet_post_id=
+									<?php
+										if ((int) $post['retweet_flag'] === 0) {
+											echo $post['id'];
+										} else {
+											echo $post['retweet_post_id'];
+										}
+									?>"><i class="fas fa-retweet"></i></a>
+									<?php else : ?>
+										<a style=color:green; href="delete_retweet.php?retweet_member_id=<?php echo $_SESSION['id']; ?>&retweet_post_id=
+									<?php
+										if ((int) $post['retweet_flag'] === 0) {
+											echo $post['id'];
+										} else {
+											echo $post['retweet_post_id'];
+										}
+									?>"><i class="fas fa-retweet"></i></a>
 									<?php endif; ?>
 									<?php echo $retweet_count['cnt']; ?>
 
