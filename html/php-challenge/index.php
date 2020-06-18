@@ -110,6 +110,17 @@ function makeLink($value)
 			foreach ($posts as $post) :
 			?>
 				<div class="msg">
+					<!--リツイートされた投稿に誰がリツイートしたか表示する-->
+					<?php
+					$stmt = $db->prepare('SELECT * FROM posts p, members m WHERE m.id=p.retweet_member_id AND p.id=?');
+					$stmt->execute(array($post['id']));
+					$retweet_by = $stmt->fetch();
+					?>
+
+					<?php if ($post['retweet_flag'] > 0) : ?>
+						<p><?php echo $retweet_by['name']; ?>がリツイートしました。</p>
+					<?php endif; ?>
+
 					<img src="member_picture/<?php echo h($post['picture']); ?>" width="48" height="48" alt="<?php echo h($post['name']); ?>" />
 					<p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]
 
