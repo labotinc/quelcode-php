@@ -118,7 +118,7 @@ function makeLink($value)
 					?>
 
 					<?php if ($post['retweet_flag'] > 0) : ?>
-						<p><?php echo $retweet_by['name']; ?>がリツイートしました。</p>
+						<p style=font-size:12px;><?php echo $retweet_by['name']; ?>がリツイートしました。</p>
 					<?php endif; ?>
 
 					<img src="member_picture/<?php echo h($post['picture']); ?>" width="48" height="48" alt="<?php echo h($post['name']); ?>" />
