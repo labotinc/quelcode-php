@@ -13,9 +13,19 @@ CREATE TABLE `posts` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `message` text NOT NULL,
       `member_id` int(11) NOT NULL,
+      `retweet_post_id` int(11) NOT NULL,
+      `retweet_member_id` int(11) NOT NULL,
+      `retweet_flag` int(11) NOT NULL
       `reply_post_id` int(11) NOT NULL,
       `created` datetime NOT NULL,
       `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE `likes` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `like_member_id` int(11) NOT NULL,
+      `like_post_id` int(11) NOT NULL,
       PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
