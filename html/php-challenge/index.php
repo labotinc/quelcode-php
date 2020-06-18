@@ -114,7 +114,7 @@ function makeLink($value)
 					<p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]
 
 						<?php
-						//likesテーブルのレコードを条件に沿って集計　
+						//いいね数を集計　
 						$like_counts = $db->prepare('SELECT COUNT(*) AS cnt FROM likes WHERE like_post_id=? GROUP BY like_post_id');
 						$like_counts->execute(array($post['id']));
 						$like_count = $like_counts->fetch();
@@ -136,8 +136,27 @@ function makeLink($value)
 									<?php echo $like_count['cnt']; ?>
 
 									<!--リツイート機能-->
+									<?php
+									//リツイート数を集計 リツイートされているかを判断しバインドする値を変える
+									$retweet_counts = $db->prepare('SELECT COUNT(*) AS cnt FROM posts WHERE retweet_post_id=? GROUP BY retweet_post_id');
+									if ((int) $post['retweet_flag'] === 0) {
+										$retweet_counts->execute(array($post['id']));
+									} else {
+										$retweet_counts->execute(array($post['retweet_post_id']));
+									}
+									$retweet_count = $retweet_counts->fetch();
+
+
+
+
+
+
+
+
+									?>
 									<a style=color:#ccc; href="retweet.php?retweet_member_id=<?php echo $_SESSION['id']; ?>&retweet_post_id=<?php echo $post['id']; ?>"><i class="fas fa-retweet"></i></a>
 									<a style=color:green; href="delete_retweet.php?retweet_member_id=<?php echo $_SESSION['id']; ?>&retweet_post_id=<?php echo $post['id']; ?>"><i class="fas fa-retweet"></i></a>
+									<?php echo $retweet_count['cnt']; ?>
 
 
 
