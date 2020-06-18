@@ -127,7 +127,11 @@ function makeLink($value)
 						<?php
 						//いいね数を集計　
 						$like_counts = $db->prepare('SELECT COUNT(*) AS cnt FROM likes WHERE like_post_id=? GROUP BY like_post_id');
+						if ((int)$post['retweet_flag'] === 0) {
 						$like_counts->execute(array($post['id']));
+						} else {
+							$like_counts->execute(array($post['retweet_post_id']));
+						}
 						$like_count = $like_counts->fetch();
 
 						//いいねしているかしていないかの判定
