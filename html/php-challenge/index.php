@@ -76,6 +76,7 @@ function makeLink($value) {
 	<title>ひとこと掲示板</title>
 
 	<link rel="stylesheet" href="style.css" />
+	<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
 </head>
 
 <body>
@@ -105,7 +106,24 @@ foreach ($posts as $post):
 ?>
     <div class="msg">
     <img src="member_picture/<?php echo h($post['picture']); ?>" width="48" height="48" alt="<?php echo h($post['name']); ?>" />
-    <p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]</p>
+    <p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]
+	
+	<?php 
+	//likesテーブルのレコードを条件に沿って集計　条件（）
+	$like_counts = $db->prepare('SELECT COUNT(*) AS cnt FROM likes WHERE　like_post_id=? GROUP BY like_post_id');
+	$like_counts->execute(array($post['id']));
+	$like_count = $like_counts->fetch();
+	?>
+	<a style=color:#ccc; href="like.php?like_member_id=<?php echo $_SESSION['id']; ?>&like_post_id=<?php echo $post['id']; ?>"><i class="far fa-heart"></i></a>
+	<a style=color:red; href="delete_like.php?like_member_id=<?php echo $_SESSION['id']; ?>$like_post_id=<?php echo $post['id']; ?>"><i class="fas fa-heart"></i</a>
+
+	<?php echo $like_count['cnt'];?>
+	
+
+
+
+	
+	</p>
     <p class="day"><a href="view.php?id=<?php echo h($post['id']); ?>"><?php echo h($post['created']); ?></a>
 		<?php
 if ($post['reply_post_id'] > 0):
