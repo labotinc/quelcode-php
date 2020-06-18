@@ -132,19 +132,40 @@ function makeLink($value)
 
 						//いいねしているかしていないかの判定
 						$likes_check = $db->prepare('SELECT COUNT(*) AS cnt FROM likes WHERE like_member_id=? AND like_post_id=?');
-						$likes_check->execute(array(
-							$_SESSION['id'],
-							$post['id']
-						));
+						if ((int) $post['retweet_flag'] === 0) {
+							$likes_check->execute(array(
+								$_SESSION['id'],
+								$post['id']
+							));
+						} else {
+							$likes_check->execute(array(
+								$_SESSION['id'],
+								$post['retweet_post_id']
+							));
+						}
 						$like_check = $likes_check->fetch();
 
 						?>
 						<!--if文でいいね数を増減させるリンクを表示-->
-						<?php if ((int) $like_check['cnt'] === 0) : ?>
-							<a style=color:#ccc; href="like.php?like_member_id=<?php echo $_SESSION['id']; ?>&like_post_id=<?php echo $post['id']; ?>"><i class="far fa-heart"></i></a>
+						<?php if ((int)$like_check['cnt'] === 0):?>
+							<a style=color:#ccc; href="like.php?like_post_id=
+							<?php
+							if ((int)$post['retweet_flag'] === 0) {
+								echo $post['id'];
+							} else {
+								echo $post['retweet_post_id'];
+							}
+							?>&like_member_id=<?php echo $_SESSION['id']; ?>"><i class="far fa-heart"></i></a>
 						<?php else : ?>
-							<a style=color:red; href="delete_like.php?like_member_id=<?php echo $_SESSION['id']; ?>&like_post_id=<?php echo $post['id']; ?>"><i class="fas fa-heart"></i</a> <?php endif; ?> <!--いいね数出力-->
-									<?php echo $like_count['cnt']; ?>
+							<a style=color:red; href="delete_like.php?like_post_id=
+							<?php if ((int)$post['retweet_flag'] === 0) {
+								echo $post['id'];
+							} else {
+								echo $post['retweet_post_id'];
+							}
+							?>&like_member_id=<?php echo $_SESSION['id']; ?>"><i class="fas fa-heart"></i></a>
+						<?php endif; ?>
+						<?php echo $like_count['cnt']; ?>
 
 									<!--リツイート機能-->
 									<?php
