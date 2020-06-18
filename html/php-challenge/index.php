@@ -146,16 +146,28 @@ function makeLink($value)
 									}
 									$retweet_count = $retweet_counts->fetch();
 
-
-
-
-
-
-
-
+									//リツイートしたかどうかアカウント毎に判定
+									$retweet_check = $db->prepare('SELECT COUNT(*) AS cnt FROM posts WHERE (id=? OR retweet_post_id=?) AND retweet_member_id=?');
+									if ((int) $post['retweet_flag'] === 0) {
+										$retweet_check->execute(array(
+											$post['id'],
+											$post['id'],
+											$_SESSION['id']
+										));
+									} else {
+										$retweet_check->execute(array(
+											$post['retweet_post_id'],
+											$post['retweet_post_id'],
+											$_SESSION['id']
+										));
+									}
+									$check_result = $retweet_check->fetch();
 									?>
+									<?php if ((int)$check_result['cnt'] === 0): ?>
 									<a style=color:#ccc; href="retweet.php?retweet_member_id=<?php echo $_SESSION['id']; ?>&retweet_post_id=<?php echo $post['id']; ?>"><i class="fas fa-retweet"></i></a>
+									<?php else: ?>
 									<a style=color:green; href="delete_retweet.php?retweet_member_id=<?php echo $_SESSION['id']; ?>&retweet_post_id=<?php echo $post['id']; ?>"><i class="fas fa-retweet"></i></a>
+									<?php endif; ?>
 									<?php echo $retweet_count['cnt']; ?>
 
 
