@@ -11,7 +11,8 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
 	$member = $members->fetch();
 } else {
 	// ログインしていない
-	header('Location: login.php'); exit();
+	header('Location: login.php');
+	exit();
 }
 
 // 投稿を記録する
@@ -24,7 +25,8 @@ if (!empty($_POST)) {
 			$_POST['reply_post_id']
 		));
 
-		header('Location: index.php'); exit();
+		header('Location: index.php');
+		exit();
 	}
 }
 
@@ -58,17 +60,20 @@ if (isset($_REQUEST['res'])) {
 }
 
 // htmlspecialcharsのショートカット
-function h($value) {
+function h($value)
+{
 	return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 }
 
 // 本文内のURLにリンクを設定します
-function makeLink($value) {
-	return mb_ereg_replace("(https?)(://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)", '<a href="\1\2">\1\2</a>' , $value);
+function makeLink($value)
+{
+	return mb_ereg_replace("(https?)(://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)", '<a href="\1\2">\1\2</a>', $value);
 }
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,99 +85,111 @@ function makeLink($value) {
 </head>
 
 <body>
-<div id="wrap">
-  <div id="head">
-    <h1>ひとこと掲示板</h1>
-  </div>
-  <div id="content">
-  	<div style="text-align: right"><a href="logout.php">ログアウト</a></div>
-    <form action="" method="post">
-      <dl>
-        <dt><?php echo h($member['name']); ?>さん、メッセージをどうぞ</dt>
-        <dd>
-          <textarea name="message" cols="50" rows="5"><?php echo h($message); ?></textarea>
-          <input type="hidden" name="reply_post_id" value="<?php echo h($_REQUEST['res']); ?>" />
-        </dd>
-      </dl>
-      <div>
-        <p>
-          <input type="submit" value="投稿する" />
-        </p>
-      </div>
-    </form>
+	<div id="wrap">
+		<div id="head">
+			<h1>ひとこと掲示板</h1>
+		</div>
+		<div id="content">
+			<div style="text-align: right"><a href="logout.php">ログアウト</a></div>
+			<form action="" method="post">
+				<dl>
+					<dt><?php echo h($member['name']); ?>さん、メッセージをどうぞ</dt>
+					<dd>
+						<textarea name="message" cols="50" rows="5"><?php echo h($message); ?></textarea>
+						<input type="hidden" name="reply_post_id" value="<?php echo h($_REQUEST['res']); ?>" />
+					</dd>
+				</dl>
+				<div>
+					<p>
+						<input type="submit" value="投稿する" />
+					</p>
+				</div>
+			</form>
 
-<?php
-foreach ($posts as $post):
-?>
-    <div class="msg">
-    <img src="member_picture/<?php echo h($post['picture']); ?>" width="48" height="48" alt="<?php echo h($post['name']); ?>" />
-    <p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]
-	
-	<?php 
-	//likesテーブルのレコードを条件に沿って集計　
-	$like_counts = $db->prepare('SELECT COUNT(*) AS cnt FROM likes WHERE　like_post_id=? GROUP BY like_post_id');
-	$like_counts->execute(array($post['id']));
-	$like_count = $like_counts->fetch();
-	?>
-	<a style=color:#ccc; href="like.php?like_member_id=<?php echo $_SESSION['id']; ?>&like_post_id=<?php echo $post['id']; ?>"><i class="far fa-heart"></i></a>
-	<a style=color:red; href="delete_like.php?like_member_id=<?php echo $_SESSION['id']; ?>&like_post_id=<?php echo $post['id']; ?>"><i class="fas fa-heart"></i</a>
+			<?php
+			foreach ($posts as $post) :
+			?>
+				<div class="msg">
+					<img src="member_picture/<?php echo h($post['picture']); ?>" width="48" height="48" alt="<?php echo h($post['name']); ?>" />
+					<p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]
 
-	<?php echo $like_count['cnt'];?>
-	
+						<?php
+						//likesテーブルのレコードを条件に沿って集計　
+						$like_counts = $db->prepare('SELECT COUNT(*) AS cnt FROM likes WHERE like_post_id=? GROUP BY like_post_id');
+						$like_counts->execute(array($post['id']));
+						$like_count = $like_counts->fetch();
+
+						//いいねしているかしていないかの判定
+						$likes_check = $db->prepare('SELECT COUNT(*) AS cnt FROM likes WHERE like_member_id=? AND like_post_id=?');
+						$likes_check->execute(array(
+							$_SESSION['id'],
+							$post['id']
+						));
+						$like_check = $likes_check->fetch();
+
+						?>
+						<!--if文でいいね数を増減させるリンクを表示-->
+						<?php if ((int) $like_check['cnt'] === 0) : ?>
+							<a style=color:#ccc; href="like.php?like_member_id=<?php echo $_SESSION['id']; ?>&like_post_id=<?php echo $post['id']; ?>"><i class="far fa-heart"></i></a>
+						<?php else : ?>
+							<a style=color:red; href="delete_like.php?like_member_id=<?php echo $_SESSION['id']; ?>&like_post_id=<?php echo $post['id']; ?>"><i class="fas fa-heart"></i</a> <?php endif; ?> <!--いいね数出力-->
+									<?php echo $like_count['cnt']; ?>
 
 
 
-	
-	</p>
-    <p class="day"><a href="view.php?id=<?php echo h($post['id']); ?>"><?php echo h($post['created']); ?></a>
-		<?php
-if ($post['reply_post_id'] > 0):
-?>
-<a href="view.php?id=<?php echo
-h($post['reply_post_id']); ?>">
-返信元のメッセージ</a>
-<?php
-endif;
-?>
-<?php
-if ($_SESSION['id'] == $post['member_id']):
-?>
-[<a href="delete.php?id=<?php echo h($post['id']); ?>"
-style="color: #F33;">削除</a>]
-<?php
-endif;
-?>
-    </p>
-    </div>
-<?php
-endforeach;
-?>
 
-<ul class="paging">
-<?php
-if ($page > 1) {
-?>
-<li><a href="index.php?page=<?php print($page - 1); ?>">前のページへ</a></li>
-<?php
-} else {
-?>
-<li>前のページへ</li>
-<?php
-}
-?>
-<?php
-if ($page < $maxPage) {
-?>
-<li><a href="index.php?page=<?php print($page + 1); ?>">次のページへ</a></li>
-<?php
-} else {
-?>
-<li>次のページへ</li>
-<?php
-}
-?>
-</ul>
-  </div>
-</div>
+
+
+					</p>
+					<p class="day"><a href="view.php?id=<?php echo h($post['id']); ?>"><?php echo h($post['created']); ?></a>
+						<?php
+						if ($post['reply_post_id'] > 0) :
+						?>
+							<a href="view.php?id=<?php echo
+														h($post['reply_post_id']); ?>">
+								返信元のメッセージ</a>
+						<?php
+						endif;
+						?>
+						<?php
+						if ($_SESSION['id'] == $post['member_id']) :
+						?>
+							[<a href="delete.php?id=<?php echo h($post['id']); ?>" style="color: #F33;">削除</a>]
+						<?php
+						endif;
+						?>
+					</p>
+				</div>
+			<?php
+			endforeach;
+			?>
+
+			<ul class="paging">
+				<?php
+				if ($page > 1) {
+				?>
+					<li><a href="index.php?page=<?php print($page - 1); ?>">前のページへ</a></li>
+				<?php
+				} else {
+				?>
+					<li>前のページへ</li>
+				<?php
+				}
+				?>
+				<?php
+				if ($page < $maxPage) {
+				?>
+					<li><a href="index.php?page=<?php print($page + 1); ?>">次のページへ</a></li>
+				<?php
+				} else {
+				?>
+					<li>次のページへ</li>
+				<?php
+				}
+				?>
+			</ul>
+		</div>
+	</div>
 </body>
+
 </html>
