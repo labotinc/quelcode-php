@@ -135,7 +135,9 @@ function makeLink($value)
 							<a style=color:red; href="delete_like.php?like_member_id=<?php echo $_SESSION['id']; ?>&like_post_id=<?php echo $post['id']; ?>"><i class="fas fa-heart"></i</a> <?php endif; ?> <!--いいね数出力-->
 									<?php echo $like_count['cnt']; ?>
 
-
+									<!--リツイート機能-->
+									<a style=color:#ccc; href="retweet.php?retweet_member_id=<?php echo $_SESSION['id']; ?>&retweet_post_id=<?php echo $post['id']; ?>"><i class="fas fa-retweet"></i></a>
+									<a style=color:green; href="delete_retweet.php?retweet_member_id=<?php echo $_SESSION['id']; ?>&retweet_post_id=<?php echo $post['id']; ?>"><i class="fas fa-retweet"></i></a>
 
 
 
