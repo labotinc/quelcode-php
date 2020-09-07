@@ -121,7 +121,12 @@ if (isset($_REQUEST['rt'])) {
     exit();
     }
 }
-
+//いいね♡
+if (isset($_REQUEST['like'])) { 
+    //必要情報抽出
+    $like_needs = $db -> prepare('select id , message, reply_post_id, retweet_post_id, retweet_member_id from posts where id=? order by created desc');
+    $like_needs->execute(array( $_REQUEST['like']));
+    $like_need = $like_needs->fetch();
 // htmlspecialcharsのショートカット
 function h($value) {
 	return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
