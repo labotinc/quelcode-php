@@ -166,7 +166,26 @@ if (isset($_REQUEST['like'])) {
 				));
 				$like_sent = $likes_sent->fetch();          
 			}
-}
+			//もし既にそのユーザーからいいねあれば削除
+		}elseif((int)$like_count['cnt'] >= 0){
+			$delete_likes= $db -> prepare('delete from likes where post_id=? and member_id=?');
+			//大元投稿
+			if((int)$like_need['retweet_post_id'] === 0){
+				$delete_likes->execute(array(
+					$like_need['id'],
+					$member['id']
+				));
+				$delete_like = $delete_likes->fetch();
+				//RTいいね
+			}elseif((int)$like_need['retweet_post_id'] !== 0){
+				$delete_likes->execute(array(
+					$like_need['retweet_post_id'],
+					$member['id']
+				));
+				$delete_like = $delete_likes->fetch();
+			}
+		}
+	}
 
 // htmlspecialcharsのショートカット
 function h($value) {
