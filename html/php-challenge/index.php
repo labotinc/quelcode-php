@@ -170,6 +170,20 @@ foreach ($posts as $post):
 ?>
     <div class="msg">
     <img src="member_picture/<?php echo h($post['picture']); ?>" width="48" height="48" alt="<?php echo h($post['name']); ?>" />
+
+	                   <!-- //RTしたUSER NAME表示                -->
+					   <?php
+                if ($post['retweet_member_id'] !== 0) {
+                    $usernames = $db->prepare('select p.*, m.name, m.id from posts  p join members  m on p.retweet_member_id = m.id where retweet_member_id = ? order by m.id ');
+                    $usernames->execute(array(
+                        $post['retweet_member_id'],
+                    ));
+                    $username = $usernames->fetch();?>
+                    <?php if ($post['retweet_post_id']>0):
+                    ?>
+                    <p class="day" style=><?php echo h($username['name']); ?>がリツイートしました</p>
+                        <?php endif;?>
+                <?php }?>
     <p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]</p>
     <p class="day"><a href="view.php?id=<?php echo h($post['id']); ?>"><?php echo h($post['created']); ?></a>
 		<?php
@@ -181,6 +195,8 @@ h($post['reply_post_id']); ?>">
 <?php
 endif;
 ?>
+
+
 <?php
 if ($_SESSION['id'] == $post['member_id']):
 ?>
