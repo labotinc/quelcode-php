@@ -17,11 +17,12 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
 // 投稿を記録する
 if (!empty($_POST)) {
 	if ($_POST['message'] != '') {
-		$message = $db->prepare('INSERT INTO posts SET member_id=?, message=?, reply_post_id=?, created=NOW()');
+		$message = $db->prepare('INSERT INTO posts SET member_id=?, message=?, reply_post_id=?,retweet_post_id=?, created=NOW()');
 		$message->execute(array(
 			$member['id'],
 			$_POST['message'],
-			$_POST['reply_post_id']
+			$_POST['reply_post_id'],
+			$_POST['retweet_post_id']
 		));
 
 		header('Location: index.php'); exit();
@@ -56,6 +57,13 @@ if (isset($_REQUEST['res'])) {
 	$table = $response->fetch();
 	$message = '@' . $table['name'] . ' ' . $table['message'];
 }
+
+//RTボタンの処理★
+if (isset($_REQUEST['rt'])) { 
+	$retweet  = $db->prepare('select id, message , member_id, retweet_post_id, retweet_member_id from posts where id=? order by created desc '); 
+	$retweet->execute(array($_REQUEST['rt']));
+	$rt_msg = $retweet->fetch();
+	$rt_counts = $db->prepare('SELECT  count(*) as rt_cnt from posts where retweet_post_id =? and retweet_member_id = ? '); 
 
 // htmlspecialcharsのショートカット
 function h($value) {
