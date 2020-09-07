@@ -81,6 +81,33 @@ if (isset($_REQUEST['rt'])) {
 			));
 			$rt_count = $rt_counts->fetch();
 		}
+		    //そのユーザが初めてRT
+	if ((int)$rt_count['rt_cnt'] === 0) { 
+        //RTをDBに挿入
+		$sent_rt = $db->prepare('INSERT INTO posts SET message=?, member_id =?, reply_post_id=0, retweet_post_id=?,      retweet_member_id=?, created=now() ');
+        //大元RTする
+		if ((int)$rt_msg['retweet_post_id'] === 0) { 
+
+            $sent_rt->execute(array(
+                $rt_msg['message'],
+                $rt_msg['member_id'],
+                $rt_msg['id'],
+                $member['id']
+            ));
+                 
+            //既にRTされた投稿
+		} elseif ((int)$rt_msg['retweet_post_id'] !== 0) { 
+			$sent_rt->execute(array(
+                $rt_msg['message'],
+                $rt_msg['member_id'],
+                $rt_msg['retweet_post_id'],
+                $member['id']
+            ));
+         
+		}
+        header('Location:index.php?='.$rt_msg['retweet_post_id']);
+        exit();
+    }
 
 // htmlspecialcharsのショートカット
 function h($value) {
