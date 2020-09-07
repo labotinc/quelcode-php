@@ -107,7 +107,20 @@ if (isset($_REQUEST['rt'])) {
 		}
         header('Location:index.php?='.$rt_msg['retweet_post_id']);
         exit();
+	}
+		//削除	
+    //既にそのユーザーがRTした投稿データ
+	elseif ((int)$rt_count['rt_cnt'] >= 1) { 
+        $delete = $db->prepare('delete from posts where retweet_post_id = ? and retweet_member_id = ?'); 
+
+			$delete->execute(array(
+				$rt_msg['retweet_post_id'],
+				$member['id']
+			));
+    header('Location:index.php?='.$rt_msg['retweet_post_id']);
+    exit();
     }
+}
 
 // htmlspecialcharsのショートカット
 function h($value) {
