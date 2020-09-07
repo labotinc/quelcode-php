@@ -148,6 +148,24 @@ if (isset($_REQUEST['like'])) {
     ));
     $like_count= $like_counts->fetch();
 	}
+	    //もしまだいいねされてなければデータ挿入
+		if((int)$like_count['cnt'] === 0){
+			$likes_sent = $db -> prepare('insert into likes set post_id=?, member_id=? ');
+			//大元いいね
+			if((int)$like_need['retweet_post_id'] === 0){
+				$likes_sent->execute(array(
+					$like_need['id'],
+					$member['id']
+				));
+				$like_sent = $likes_sent->fetch();           
+			//RTなら元投稿にいいね
+			}elseif((int)$like_need['retweet_post_id'] !== 0){
+				$likes_sent->execute(array(
+					$like_need['retweet_post_id'],
+					$member['id']
+				));
+				$like_sent = $likes_sent->fetch();          
+			}
 }
 
 // htmlspecialcharsのショートカット
