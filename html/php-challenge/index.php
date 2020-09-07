@@ -129,6 +129,26 @@ if (isset($_REQUEST['like'])) {
 	$like_need = $like_needs->fetch();
 	    //likesとposts 紐付け
 		$like_rerations  = $db->prepare('select l.post_id,l.member_id, p.message, p.reply_post_id, p. retweet_post_id from likes l join posts p on l.post_id = p.id where p.id =? order by created desc '); 
+		$like_rerations-> execute(array($_REQUEST['like']));
+    $like_reration= $like_rerations->fetch();   
+    //likesテーブルからカウント
+    $like_counts = $db->prepare('SELECT  count(post_id) as cnt from likes where post_id = ? and member_id=?');
+    //大元投稿
+    if((int)$like_need['retweet_post_id'] === 0){
+    $like_counts -> execute(array(
+        $like_need['id'],
+        $member['id']
+        ));
+        $like_count= $like_counts->fetch(); 
+        //RTされた投稿
+     }elseif((int)$like_need['retweet_post_id'] !== 0){
+        $like_counts -> execute(array(
+        $like_need['retweet_post_id'],
+        $member['id']
+    ));
+    $like_count= $like_counts->fetch();
+	}
+}
 
 // htmlspecialcharsのショートカット
 function h($value) {
