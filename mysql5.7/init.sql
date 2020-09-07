@@ -21,6 +21,10 @@ CREATE TABLE `posts` (
       PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
+CREATE TABLE `likes` (
+      `post_id` int(11) NOT NULL,
+      `member_id` int(11) NOT NULL
+)ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE `prechallenge3` (
       `value` int(11) NOT NULL
