@@ -64,6 +64,23 @@ if (isset($_REQUEST['rt'])) {
 	$retweet->execute(array($_REQUEST['rt']));
 	$rt_msg = $retweet->fetch();
 	$rt_counts = $db->prepare('SELECT  count(*) as rt_cnt from posts where retweet_post_id =? and retweet_member_id = ? '); 
+		//元投稿をRT
+		if ((int)$rt_msg['retweet_post_id'] === 0) {
+
+			$rt_counts->execute(array(
+				$rt_msg['id'],
+				$member['id']
+			));
+			$rt_count = $rt_counts->fetch();
+			//RTをRT
+		} elseif ((int)$rt_msg['retweet_post_id'] !== 0) {
+	
+			$rt_counts->execute(array(
+				$rt_msg['retweet_post_id'],
+				$member['id']
+			));
+			$rt_count = $rt_counts->fetch();
+		}
 
 // htmlspecialcharsのショートカット
 function h($value) {
