@@ -126,7 +126,10 @@ if (isset($_REQUEST['like'])) {
     //必要情報抽出
     $like_needs = $db -> prepare('select id , message, reply_post_id, retweet_post_id, retweet_member_id from posts where id=? order by created desc');
     $like_needs->execute(array( $_REQUEST['like']));
-    $like_need = $like_needs->fetch();
+	$like_need = $like_needs->fetch();
+	    //likesとposts 紐付け
+		$like_rerations  = $db->prepare('select l.post_id,l.member_id, p.message, p.reply_post_id, p. retweet_post_id from likes l join posts p on l.post_id = p.id where p.id =? order by created desc '); 
+
 // htmlspecialcharsのショートカット
 function h($value) {
 	return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
