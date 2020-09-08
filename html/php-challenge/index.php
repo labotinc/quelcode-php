@@ -306,49 +306,6 @@ h($post['reply_post_id']); ?>">
 <?php
 endif;
 ?>
-			<!-- RT機能 -->
-            <!-- カウント表示 -->
-			<?php 
-        $retweets_total=$db->prepare('select count(retweet_post_id) as rt_cnt from posts where retweet_post_id =? and retweet_member_id > 0 ');
-          $retweets_total->execute(array($post['id'] ));
-          $retweet_total=$retweets_total->fetch();
-          // RTされていない投稿
-       if((int)$retweet_total['rt_cnt']===0)
-         {
-         ?>
-       [<a href="index.php?rt=<?php echo h($post['id']); ?>" style="color:blue; text-decoration:none;" ><span>RT
-       </span></a>]
-        <?php
-        //RT数のある投稿
-        }elseif((int)$retweet_total['rt_cnt'] >=1)
-            {?>
-        [<a href="index.php?rt=<?php echo h($post['id']); ?>" style="color:DarkCyan; text-decoration:none;" "><span><?php  echo h($retweet_total['rt_cnt']);?>RT
-        </span></a>]                        
-        <?php  }?>
-<!-- いいねボタン -->
-<?php     
-            $likes_total = $db->prepare('select count(post_id) as cnt from likes where post_id =?  group by post_id');               
-            //元投稿
-            if((int)$post['retweet_post_id'] === 0){
-                $likes_total ->execute(array(
-                    $post['id']
-                ));
-                $like_total = $likes_total->fetch();
-                //RT
-            }elseif((int)$post['retweet_post_id'] !== 0){
-                $likes_total ->execute(array(
-                    $post['retweet_post_id']
-                ));
-                $like_total = $likes_total->fetch();    
-            }
-            if((int)$like_total['cnt'] ===0 )
-            {?>
-                [<a href="index.php?like=<?php echo h($post['id']); ?>" style="color:pink; text-decoration:none;"><span id="like"><i class="fas fa-heart"></i><?php echo h($like_total['cnt']); ?></span></a>]
-            <?php
-                }elseif((int)$like_total['cnt']  >= 1 ){?>
-                [<a href="index.php?like=<?php echo h($post['id']); ?>" style="color:red; text-decoration:none;"><span id="like"><i class="fas fa-heart"></i><?php echo h($like_total['cnt']); ?></span></a>]
-    
-                <?php } ?>
 <?php
 if ($_SESSION['id'] == $post['member_id']):
 ?>
