@@ -296,7 +296,7 @@ foreach ($posts as $post):
                 [<a href="index.php?like=<?php echo h($post['id']); ?>" style="color:red; text-decoration:none;"><span id="like"><i class="fas fa-heart"></i><?php echo h($like_total['cnt']); ?></span></a>]
     
                 <?php } ?>           
- <p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]</p>
+ 
     <p class="day"><a href="view.php?id=<?php echo h($post['id']); ?>"><?php echo h($post['created']); ?></a>   
 		<?php
 if ($post['reply_post_id'] > 0):
