@@ -252,9 +252,9 @@ foreach ($posts as $post):
                     <p class="day" style=><?php echo h($username['name']); ?>がリツイートしました</p>
                         <?php endif;?>
                 <?php }?>
-                <p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]</p> 
-     			<!-- RT機能 -->
-            <!-- カウント表示 -->
+                <!-- RT機能 -->
+                <!-- カウント表示 -->
+                <p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>] 
 			<?php 
         $retweets_total=$db->prepare('select count(retweet_post_id) as rt_cnt from posts where retweet_post_id =? and retweet_member_id > 0 ');
           $retweets_total->execute(array($post['id'] ));
@@ -296,6 +296,7 @@ foreach ($posts as $post):
                 [<a href="index.php?like=<?php echo h($post['id']); ?>" style="color:red; text-decoration:none;"><span id="like"><i class="fas fa-heart"></i><?php echo h($like_total['cnt']); ?></span></a>]
     
                 <?php } ?>           
+                </p>
  
     <p class="day"><a href="view.php?id=<?php echo h($post['id']); ?>"><?php echo h($post['created']); ?></a>   
 		<?php
