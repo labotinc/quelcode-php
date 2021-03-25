@@ -26,7 +26,7 @@ CREATE TABLE `prechallenge3` (
 
 INSERT INTO `prechallenge3` (`value`) VALUES (1),(17),(3),(13),(11),(7),(19),(5);
 
--- 課題：リツイートといいね機能の実
+-- 課題：リツイートといいね機能の実装
 CREATE TABLE `favorite` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `member_id` int(11) NOT NULL,
