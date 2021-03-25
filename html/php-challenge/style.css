@@ -144,3 +144,17 @@ li {
 	color: #999;
 }
 
+.retweet{
+	display: inline-block;
+	font-size:100%;
+}
+.favorite{
+	display: inline-block;
+	font-size:100%;
+}
+.retweet-image{
+	height:20px;
+}
+.favorite-image{
+	height:20px;
+}
